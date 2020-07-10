@@ -16,4 +16,10 @@ public class UserServiceImp implements UserService {
 		return userDao.getPw(id);
 	}
 
+	@Override
+	public int getCnt() {
+		// TODO Auto-generated method stub
+		return userDao.getCnt();
+	}
+
 }

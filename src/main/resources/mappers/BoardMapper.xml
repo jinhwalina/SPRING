@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.spring.controller.dao.BoardDao">
+  <select id="getBoardList" resultType="kr.spring.vo.BoardVo">
+    select * 
+    	from board
+    	where isDel = 'N'
+  </select>
+  <select id="getBoard" resultType="kr.spring.vo.BoardVo">
+    select * from board where num = #{num}
+  </select>
+  <update id="increaseViews">
+  	update board
+  		set
+  			views = views+1
+  		where
+  			num = #{num}
+  </update>
+  
+  <insert id="registerBoard">
+  	insert into board(title,writer,content)
+  	values(#{board.title},#{board.writer},#{board.content})
+  </insert>
+  <update id="updateBoard">
+  	update board
+  		set
+  			title = #{board.title},
+  			content = #{board.content},
+  			isDel = #{board.isDel},
+  			delDate = #{board.delDate}
+  		where
+  			num = #{board.num}
+  </update>
+</mapper>

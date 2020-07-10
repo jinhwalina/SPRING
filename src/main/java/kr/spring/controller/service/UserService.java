@@ -4,4 +4,7 @@ public interface UserService {
 
 	String getPw(String id);
 
+	int getCnt();
+
+
 }

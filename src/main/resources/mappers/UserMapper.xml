@@ -6,6 +6,10 @@
   <select id="getPw" resultType="String">
     select pw from user where id = #{id}
   </select>
+  
+  <select id="getCnt" resultType="int">
+  	select count(*) from user
+  </select>
 </mapper>
 
 <!-- #{} dao의 매개변수명 -->

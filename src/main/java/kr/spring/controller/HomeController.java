@@ -41,7 +41,10 @@ public class HomeController {
 		
 		String userPw = userService.getPw(id);
 		logger.info("조회된 비밀번호 : " + userPw);
+		int cntUser = userService.getCnt();
+		logger.info("조회된 회원 수 : " + cntUser);
+		
 		return mv;
 	}
-	
+
 }
