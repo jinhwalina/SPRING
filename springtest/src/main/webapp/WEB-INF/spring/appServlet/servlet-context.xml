@@ -21,7 +21,9 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="kr.green.springtest" />
+	<!-- component-scan : 클래스와 인터페이스들을 읽기 위한 기본 패키지를 설정하는 것으로 , 일반적으로는 공통 패키지를 입력 후, 뒷부분에 .*을 써준다! 하는 역할을 잘 기억하고 있어야함. 프로그램 구동이 안될 수 있음. -->
+	<context:component-scan base-package="kr.green.springtest.*" /> 
+	<!-- *로 지정해준 이유는, 뒤에 지정 파일 패키지명만 써주면 그 파일만 인식하기 때문에 *로 지정해줌. 내가 만든 클래스와 인터페이스를 읽어오는 역할을 한다. -->
 	
 	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
     	<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
