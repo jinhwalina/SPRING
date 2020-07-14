@@ -18,7 +18,6 @@ public class BoardController {
 	BoardService boardService;
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
-	
 	public ModelAndView boardListGet(ModelAndView mv) {
 		mv.setViewName("/board/list");
 		ArrayList<BoardVo> list = boardService.getBoardList(); // board 게시판에 있는 글을 다 가져오는 
@@ -27,5 +26,39 @@ public class BoardController {
 		mv.addObject("list",list);
 		return mv;
 	}
+	@RequestMapping(value = "/board/detail", method = RequestMethod.GET)
+	public ModelAndView boardDetailGet(ModelAndView mv, Integer num) {
+		mv.setViewName("/board/detail");
+		//BoardVo board = boardService.getBoard(num); // 번호를서비스한테 넘겨주면, 서비스는 그에 맞는 정보를 넘겨준다.
+		// getBoard는 글 수정하고 쓸 때 사용할 수 있기 때문에, 지우지는 않고 남겨준다.
+		BoardVo board = boardService.view(num); // 조회수 증가를 추가하기위함
+		mv.addObject("board",board); // board의 board를 클라이언트한테 보내준다.
+		return mv;
+	}
+	@RequestMapping(value = "/board/register", method = RequestMethod.GET)
+	public ModelAndView boardRegisterGet(ModelAndView mv) { // 넘어오는 정보 없음 
+		mv.setViewName("/board/register"); 
+		return mv;
+	}
+	@RequestMapping(value = "/board/register", method = RequestMethod.POST) 
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board) {
+		mv.setViewName("redirect:/board/list"); // 등록을 하면 보내는곳 > list
+		boardService.insertBoard(board); // 일을 시킴
+		return mv;
+	}
+	@RequestMapping(value = "/board/modify", method = RequestMethod.GET)
+	public ModelAndView boardModifyGet(ModelAndView mv, Integer num) { // 넘어오는 정보 없음 
+		mv.setViewName("/board/modify");
+		BoardVo board = boardService.getBoard(num);
+		mv.addObject("board",board);
+		return mv;
+	}
+	@RequestMapping(value = "/board/modify", method = RequestMethod.POST)
+	public ModelAndView boardModifyGet(ModelAndView mv, BoardVo board) {
+		mv.setViewName("redirect:/board/list");
+		boardService.updateBoard(board);
+		return mv;
+	}
+	
 
 }
