@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.spring.controller.dao.BoardDao;
+import kr.spring.controller.pagination.Criteria;
+import kr.spring.controller.pagination.PageMaker;
 import kr.spring.vo.BoardVo;
 
 @Service
@@ -16,8 +18,8 @@ public class BoardSerivceImp implements BoardService {
 	private BoardDao boardDao;
 
 	@Override
-	public ArrayList<BoardVo> getBoardList() {
-		return boardDao.getBoardList();
+	public ArrayList<BoardVo> getBoardList(Criteria cri) {
+		return boardDao.getBoardList(cri);
 	}
 
 	@Override
@@ -54,6 +56,15 @@ public class BoardSerivceImp implements BoardService {
 				boardDao.updateBoard(board);
 			}
 		}
+	}
+
+	@Override
+	public PageMaker getPageMaker(Criteria cri) {
+		PageMaker pm = new PageMaker();
+		int totalCount = boardDao.getTotalCount(); // 전체 갯수를 가져오도록 오청함
+		pm.setCriteria(cri);
+		pm.setTotalCount(totalCount);
+		return pm;
 	}
 	 
 	

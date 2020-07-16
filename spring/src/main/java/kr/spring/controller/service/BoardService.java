@@ -2,11 +2,13 @@ package kr.spring.controller.service;
 
 import java.util.ArrayList;
 
+import kr.spring.controller.pagination.Criteria;
+import kr.spring.controller.pagination.PageMaker;
 import kr.spring.vo.BoardVo;
 
 public interface BoardService {
 
-	ArrayList<BoardVo> getBoardList();
+	ArrayList<BoardVo> getBoardList(Criteria cri);
 
 	BoardVo getBoard(Integer num);
 
@@ -17,5 +19,7 @@ public interface BoardService {
 	void updateBoard(BoardVo board);
 
 	void deleteBoard(Integer num);
+
+	PageMaker getPageMaker(Criteria cri);
 
 }
