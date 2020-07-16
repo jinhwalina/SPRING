@@ -33,12 +33,12 @@ public class BoardController {
 		list = boardService.getBoardList(cri); // 현재 페이지 정보를 가져옴 
 		mv.addObject("list", list);
 		mv.addObject("pm",pm);
-		System.out.println(pm);
+		System.out.println(cri);
 		return mv;
 	}
 	
 	@RequestMapping(value = "/board/detail", method = RequestMethod.GET)
-	public ModelAndView boardDetailGet(ModelAndView mv, Integer num) {
+	public ModelAndView boardDetailGet(ModelAndView mv, Integer num, Criteria cri) {
 		logger.info("URI:/board/detail");
 		mv.setViewName("/board/detail");
 		BoardVo board = null;
@@ -50,6 +50,7 @@ public class BoardController {
 				board.setViews(board.getViews()+1);
 			}
 		}
+		mv.addObject("cri", cri);
 		return mv;
 	}
 	@RequestMapping(value = "/board/register", method = RequestMethod.GET)

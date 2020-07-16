@@ -61,7 +61,7 @@ public class BoardSerivceImp implements BoardService {
 	@Override
 	public PageMaker getPageMaker(Criteria cri) {
 		PageMaker pm = new PageMaker();
-		int totalCount = boardDao.getTotalCount(); // 전체 갯수를 가져오도록 오청함
+		int totalCount = boardDao.getTotalCount(cri); // 전체 갯수를 가져오도록 오청함
 		pm.setCriteria(cri);
 		pm.setTotalCount(totalCount);
 		return pm;
