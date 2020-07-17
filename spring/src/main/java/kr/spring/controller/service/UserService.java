@@ -1,10 +1,9 @@
 package kr.spring.controller.service;
 
+import kr.spring.vo.UserVo;
+
 public interface UserService {
 
-	String getPw(String id);
-
-	int getCnt();
-
+	boolean signUp(UserVo user);
 
 }

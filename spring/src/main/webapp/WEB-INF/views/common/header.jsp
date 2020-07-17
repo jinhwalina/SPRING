@@ -9,13 +9,13 @@
 	  	<div class="collapse navbar-collapse" id="collapsibleNavbar">
 	    	<ul class="navbar-nav">
 		      	<li class="nav-item">
-		        	<a class="nav-link" href="<%= request.getContextPath()%>/">메인</a>
+		        	<a class="nav-link" href="<%= request.getContextPath()%>/">Main</a>
 		      	</li>
 		      	<li class="nav-item">
-		        	<a class="nav-link" href="<%= request.getContextPath()%>/board/list">게시판</a>
+		        	<a class="nav-link" href="<%= request.getContextPath()%>/board/list">Board</a>
 		      	</li>
 		      	<li class="nav-item">
-		        	<a class="nav-link" href="#">Link</a>
+		        	<a class="nav-link" href="<%= request.getContextPath()%>/user/signup">Sign up</a>
 		      	</li>    
 	    	</ul>
 		</div> 
