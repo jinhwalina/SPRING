@@ -23,7 +23,7 @@
     		and content like concat('%', #{cri.search}, '%')
     	</if>
     	order by num desc
-    	limit #{cri.pageStart}, #{cri.perPageNum}
+    	limit #{cri.startPage}, #{cri.perPageNum}
   </select>
   <select id="getBoard" resultType="kr.spring.vo.BoardVo">
     select * from board where num = #{num}

@@ -7,9 +7,27 @@
   	select * 
   		from board 
   		where isDel = 'N'
-  		order by num desc limit 0,10
-  		<!-- desc 내림차순! / limit 0번째부터 최대 10까지 나타내주게 제한을 둠 !  -->
+  		<!-- order by num desc limit 0,10
+  		desc 내림차순! / limit 0번째부터 최대 10까지 나타내주게 제한을 둠 !  -->
+		<if test="cri.type == 0">
+			and
+			(writer like concat('%', #{cri.search}, '%')
+			or title like concat('%', #{cri.search}, '%')
+			or content like concat('%', #{cri.search}, '%'))
+		</if>
+		<if test="cri.type == 1">
+			and writer like concat('%', #{cri.search}, '%')
+		</if>
+		<if test="cri.type == 2">
+			and title like concat('%', #{cri.search}, '%')
+		</if>
+		<if test="cri.type == 3">
+			and content like concat('%', #{cri.search}, '%')
+		</if>
+		order by num desc
+		limit #{cri.startPage}, #{cri.perPageNum}
   </select>
+  
   <select id="getBoard" resultType="kr.green.springtest.vo.BoardVo">
   	select *
   		from board
@@ -31,4 +49,24 @@
   		where
   			num = #{board.num}
   </update>
+  <select id="getTotalCountByBoard" resultType="int">
+  	select count(*)
+  		from board
+  		where isDel = 'N'
+  		<if test="cri.type == 0">
+			and
+			(writer like concat('%', #{cri.search}, '%')
+			or title like concat('%', #{cri.search}, '%')
+			or content like concat('%', #{cri.search}, '%'))
+		</if>
+		<if test="cri.type == 1">
+			and writer like concat('%', #{cri.search}, '%')
+		</if>
+		<if test="cri.type == 2">
+			and title like concat('%', #{cri.search}, '%')
+		</if>
+		<if test="cri.type == 3">
+			and content like concat('%', #{cri.search}, '%')
+		</if>
+  </select>
 </mapper>

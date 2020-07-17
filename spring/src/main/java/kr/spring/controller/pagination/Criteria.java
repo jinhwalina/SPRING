@@ -59,7 +59,7 @@ public class Criteria {
 		return "Criteria [page=" + page + ", perPageNum=" + perPageNum + ", search=" + search + ", type=" + type + "]";
 	}
 
-	public int getPageStart() { // getPageStart() 는 언제 호출 될까!
+	public int getStartPage() { // getPageStart() 는 언제 호출 될까!
 		return (page - 1) * perPageNum;
 	}
 }
