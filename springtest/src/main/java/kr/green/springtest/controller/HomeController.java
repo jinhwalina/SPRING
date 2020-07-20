@@ -3,7 +3,9 @@ package kr.green.springtest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,6 +35,22 @@ public class HomeController {
 		}
 		return mv;
 	}
+	@RequestMapping(value = "/user/signup", method = RequestMethod.GET)
+	public ModelAndView signupGet(ModelAndView mv) {
+		logger.info("URI:/signup:GET");
+		mv.setViewName("/user/signup"); 
+		return mv;
+	}
+	@RequestMapping(value = "/user/signup", method = RequestMethod.POST)
+	public ModelAndView signupPost(ModelAndView mv, UserVo user) {
+		logger.info("URI:/signup:POST");
+		if(userService.signup(user)) {
+			mv.setViewName("redirect:/");
+		}else
+			mv.setViewName("redirect:/user/signup"); 
+		return mv;
+	}
+	
 	
 	
 	

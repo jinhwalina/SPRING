@@ -3,6 +3,35 @@ package kr.green.springtest.vo;
 public class UserVo {
 	private String id;
 	private String pw;
+	private String email;
+	private String gender;
+	private String auth;
+	private String isDel;
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getAuth() {
+		return auth;
+	}
+	public void setAuth(String auth) {
+		this.auth = auth;
+	}
+	public String getIsDel() {
+		return isDel;
+	}
+	public void setIsDel(String isDel) {
+		this.isDel = isDel;
+	}
 	public String getId() {
 		return id;
 	}
@@ -15,9 +44,11 @@ public class UserVo {
 	public void setPw(String pw) {
 		this.pw = pw;
 	}
-	@Override // toString은 사실 없어도 되지만, 콘솔에서 편하게 확인하기 위해 추가해줌
+	@Override
 	public String toString() {
-		return "UserVo [id=" + id + ", pw=" + pw + "]";
+		return "UserVo [id=" + id + ", pw=" + pw + ", email=" + email + ", gender=" + gender + ", auth=" + auth
+				+ ", isDel=" + isDel + "]";
 	}
+	
 	
 }
