@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.spring.controller.pagination.Criteria;
 import kr.spring.controller.pagination.PageMaker;
 import kr.spring.controller.service.BoardService;
+import kr.spring.controller.service.UserService;
 import kr.spring.vo.BoardVo;
 import kr.spring.vo.UserVo;
 
@@ -26,10 +27,12 @@ public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private UserService userService;
 	
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
-	public ModelAndView boardListGet(ModelAndView mv, Criteria cri, HttpServletRequest request) {
+	public ModelAndView boardListGet(ModelAndView mv, Criteria cri) {
 		logger.info("URI:/board/list");
 		mv.setViewName("/board/list"); 
 		PageMaker pm = boardService.getPageMaker(cri);
@@ -39,8 +42,6 @@ public class BoardController {
 		mv.addObject("pm",pm);
 		System.out.println(cri);
 		
-		HttpSession session = request.getSession();
-		System.out.println((UserVo)session.getAttribute("user"));
 		
 		return mv;
 	}
@@ -69,38 +70,42 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST) /* 메서드 이름에 따라 전송받을때 어디로 받을지 결정된다. */
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board) { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest request) { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
 		logger.info("URI:/board/register:POST");
 		mv.setViewName("redirect:/board/list"); 
-		boardService.registerBoard(board);
+		boardService.registerBoard(board, request);
 		return mv;
 	}
 	
 	@RequestMapping(value = "/board/modify", method = RequestMethod.GET)
-	public ModelAndView boardModifyGet(ModelAndView mv, Integer num) {
+	public ModelAndView boardModifyGet(ModelAndView mv, Integer num, HttpServletRequest request) {
 		logger.info("URI:/board/modify:GET");
 		mv.setViewName("/board/modify");
 		System.out.println(num);
 		BoardVo board = null;
+		UserVo user = userService.getUser(request);
 		if(num != null) {
 			board = boardService.getBoard(num);
+			if(user == null || board.getWriter().equals(user.getId()))
+				mv.setViewName("redirect:/board/list");
 		}
 		mv.addObject("board",board);
 		return mv;
 	}
 	@RequestMapping(value = "/board/modify", method = RequestMethod.POST)
-	public ModelAndView boardModifyPost(ModelAndView mv, BoardVo board) {
+	public ModelAndView boardModifyPost(ModelAndView mv, BoardVo board, HttpServletRequest request) {
 		logger.info("URI:/board/modify:POST");
 		mv.setViewName("redirect:/board/list"); /* 수정이 끝나면 어디로 보낼지 정해주는 코드 이건 list로 보냄*/
-		boardService.updateBoard(board);
+		UserVo user = userService.getUser(request);
+		boardService.updateBoard(board, user);
 		return mv;
 	}
 	
-	@RequestMapping(value = "/board/delete", method = RequestMethod.GET)
-	public ModelAndView boardDeleteGet(ModelAndView mv, Integer num) {
+	@RequestMapping(value = "/board/delete", method = RequestMethod.GET) // 작성자만 게시글을 삭제할 수 있는 
+	public ModelAndView boardDeleteGet(ModelAndView mv, Integer num, HttpServletRequest request) {
 		logger.info("URI:/board/delete:GET");
 		mv.setViewName("redirect:/board/list");
-		boardService.deleteBoard(num);
+		boardService.deleteBoard(num, userService.getUser(request));
 		return mv;
 	}
 	

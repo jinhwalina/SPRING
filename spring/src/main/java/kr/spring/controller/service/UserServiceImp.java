@@ -1,5 +1,7 @@
 package kr.spring.controller.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,11 @@ public class UserServiceImp implements UserService {
 		if(dbUser != null && passwordEncoder.matches(user.getPw(), dbUser.getPw()))
 			return dbUser;
 		return null;
+	}
+	@Override
+	public UserVo getUser(HttpServletRequest request) {
+		
+		return (UserVo)request.getSession().getAttribute("user");
 	}
 
 
