@@ -40,6 +40,13 @@ public class UserServiceImp implements UserService {
 		return true;
 		
 	}
+	@Override
+	public UserVo isSignin(UserVo user) {
+		UserVo dbUser = userDao.getUser(user.getId());
+		if(dbUser != null && passwordEncoder.matches(user.getPw(), dbUser.getPw()))
+			return dbUser;
+		return null;
+	}
 
 
 }

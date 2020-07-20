@@ -1,0 +1,35 @@
+package kr.spring.controller.interceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import kr.spring.vo.UserVo;
+
+public class LoginInterceptor extends HandlerInterceptorAdapter {
+
+	@Override
+	public void postHandle(
+	    HttpServletRequest request, 
+	    HttpServletResponse response, 
+	    Object handler, 
+	    ModelAndView modelAndView)
+	    throws Exception {
+	    ModelMap modelMap = modelAndView.getModelMap();
+	    // 컨트롤러에서 addObject로 보낼 때 이름이 user인 정보를 가져옴.
+	    // 컨트롤러에서 보내는 이름을 a로 수정한다면 get("a")로 수정해야함
+	    UserVo user = (UserVo)modelMap.get("user"); // user라는 정보를 보내면 , session이라는 곳에 저장을함. 그래서 있는지 없는지 여부에 따라 로그인을 한 상태인지 아닌지 알 수 있음
+
+	    if(user != null) {
+	        HttpSession session = request.getSession(); // session에서 정보를 저장하는 시간이 일정시간 지나가면 로그아웃되게 설정할 수 있다.
+	        // 세션에서 user로 저장하기 때문에 jsp에서는 ${user}로 사용할 수 있음
+	        // 여기서 이름을 b로 바꾸면 jsp에서는 ${b}로 사용할 수 있음
+	        session.setAttribute("user", user);
+	    }
+	}
+	
+}

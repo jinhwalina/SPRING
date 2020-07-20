@@ -6,4 +6,6 @@ public interface UserService {
 
 	boolean signUp(UserVo user);
 
+	UserVo isSignin(UserVo user);
+
 }

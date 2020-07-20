@@ -3,6 +3,9 @@ package kr.spring.controller;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import kr.spring.controller.pagination.Criteria;
 import kr.spring.controller.pagination.PageMaker;
 import kr.spring.controller.service.BoardService;
 import kr.spring.vo.BoardVo;
+import kr.spring.vo.UserVo;
 
 @Controller
 public class BoardController {
@@ -25,7 +29,7 @@ public class BoardController {
 	
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
-	public ModelAndView boardListGet(ModelAndView mv, Criteria cri) {
+	public ModelAndView boardListGet(ModelAndView mv, Criteria cri, HttpServletRequest request) {
 		logger.info("URI:/board/list");
 		mv.setViewName("/board/list"); 
 		PageMaker pm = boardService.getPageMaker(cri);
@@ -34,6 +38,10 @@ public class BoardController {
 		mv.addObject("list", list);
 		mv.addObject("pm",pm);
 		System.out.println(cri);
+		
+		HttpSession session = request.getSession();
+		System.out.println((UserVo)session.getAttribute("user"));
+		
 		return mv;
 	}
 	

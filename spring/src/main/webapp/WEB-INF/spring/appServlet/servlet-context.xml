@@ -36,5 +36,13 @@
 		        </beans:list>
 		    </beans:property>
 		</beans:bean>
+		
+		<beans:bean id="loginInterceptor" class="kr.spring.controller.interceptor.LoginInterceptor"></beans:bean> <!-- 패키지명과 항상 맞아야한다. 이름 확인해주기 -->
+		<interceptors>
+			<interceptor>
+				<mapping path="/"/>
+				<beans:ref bean="loginInterceptor"/>
+			</interceptor>
+		</interceptors>
 	
 </beans:beans>

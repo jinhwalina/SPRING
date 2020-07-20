@@ -5,6 +5,7 @@
 <script src="https://kit.fontawesome.com/0e9b7a4ea6.js" crossorigin="anonymous"></script>
 
 <h2>BOARD</h2>
+
   <table class="table table-hover">
     <thead>
       <tr>
