@@ -37,5 +37,26 @@
         	</beans:list>
     	</beans:property>
 	</beans:bean>
+	
+	<beans:bean id="authInterceptor" 
+	class="kr.green.springtest.interceptor.AuthInterceptor"></beans:bean>
+	 <!-- beans bean 해당 요소 등록 -->
+	<beans:bean id="loginInterceptor"
+	class="kr.green.springtest.interceptor.LoginInterceptor"></beans:bean>
+	<interceptors> <!-- 여러개의 interceptor들이 올 수 있다. 여러개 등록 가능  -->
+		<interceptor>
+			<mapping path="/"/> <!-- 경로에 정보가 들어오면 이걸 실행하겠다.  -->
+			<mapping path="/user/signin"/>
+			<beans:ref bean="loginInterceptor"/> <!-- id값과 일치시켜줘야한다. -->
+		</interceptor>
+		<interceptor>
+        	<mapping path="/board/register"/>
+        	<mapping path="/board/modify"/>
+        	<mapping path="/board/delete"/>
+        	<beans:ref bean="authInterceptor"/>
+    </interceptor>
+	</interceptors>
+	
+	
 
 </beans:beans>

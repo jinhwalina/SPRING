@@ -2,11 +2,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
+
+
+<title>Home</title>
+<c:if test="${user == null }">
 	<h1>Login</h1>
 	<div class="container">
 	  <form action="<%= request.getContextPath()%>/" method="post">
@@ -24,6 +23,7 @@
 	</div>
 	<input type="hidden" value="${isLogin}" id="isLogin">
 	<input type="hidden" value="${id}" id="id">
+</c:if>
 	<script type="text/javascript">
 		$(function(){
 			var id = $('#id').val();
@@ -31,9 +31,7 @@
 			if(isLogin == 'false' && id != '')
 				alert(id + '가 없거나 비밀번호가 잘못 되었습니다.')
 		})
-	
 	</script>
-</body>
-</html>
+
 
 

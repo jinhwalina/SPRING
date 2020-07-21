@@ -1,5 +1,7 @@
 package kr.green.springtest.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class UserServiceImp implements UserService {
 		UserVo user = userDao.getUser(inputUser.getId());
 		if(user == null)
 			return null;
-		if(user.getPw().equals(inputUser.getPw())) {
+		if(passwordEncoder.matches(inputUser.getPw(), user.getPw())) {
 			return user;
 		}
 		return null;
@@ -62,5 +64,11 @@ public class UserServiceImp implements UserService {
 		user.setPw(encodePw);
 		userDao.insertUser(user);
 		return true;
+	}
+
+	@Override
+	public UserVo getUser(HttpServletRequest r) {
+		
+		return (UserVo)r.getSession().getAttribute("user");
 	}
 }

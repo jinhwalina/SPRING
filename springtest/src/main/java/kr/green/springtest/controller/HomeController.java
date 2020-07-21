@@ -1,5 +1,7 @@
 package kr.green.springtest.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,20 @@ public class HomeController {
 		// userDao.getUser(inputUser.getId());
 		
 		// 서버가 클라이언트한테 정보를 전달하는코드. 아이디를 전송하고, 로그인을 했는 지 안했는 지
-		mv.addObject("id", inputUser.getId());
-		if(user == null) {
-			mv.addObject("isLogin", false);
+		// mv.addObject("id", inputUser.getId());
+		if(user != null) {
+			mv.setViewName("redirect:/board/list");
+			mv.addObject("user", user);
 		}
 		return mv;
 	}
+	@RequestMapping(value = "/user/signin", method = RequestMethod.GET)
+	public ModelAndView home(ModelAndView mv) {
+		logger.info("URI:/signin");
+		mv.setViewName("/main/home"); 
+		return mv;
+	}
+	
 	@RequestMapping(value = "/user/signup", method = RequestMethod.GET)
 	public ModelAndView signupGet(ModelAndView mv) {
 		logger.info("URI:/signup:GET");
@@ -50,7 +60,13 @@ public class HomeController {
 			mv.setViewName("redirect:/user/signup"); 
 		return mv;
 	}
-	
+	@RequestMapping(value = "/user/signout", method = RequestMethod.GET)
+	public ModelAndView signoutGet(ModelAndView mv, HttpServletRequest request) {
+		logger.info("URI:/signout:GET");
+		mv.setViewName("redirect:/"); 
+		request.getSession().removeAttribute("user");
+		return mv;
+	}
 	
 	
 	

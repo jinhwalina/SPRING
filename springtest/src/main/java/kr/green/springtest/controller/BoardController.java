@@ -2,6 +2,8 @@ package kr.green.springtest.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +13,18 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.green.springtest.pagination.Criteria;
 import kr.green.springtest.pagination.PageMaker;
 import kr.green.springtest.service.BoardService;
+import kr.green.springtest.service.UserService;
 import kr.green.springtest.vo.BoardVo;
+import kr.green.springtest.vo.UserVo;
 
 @Controller
 public class BoardController {
 	
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	UserService userService;
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
 	public ModelAndView boardListGet(ModelAndView mv, Criteria cri) {
@@ -46,28 +53,33 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST) 
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board) {
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest r) {
 		mv.setViewName("redirect:/board/list"); // 등록을 하면 보내는곳 > list
+		board.setWriter(userService.getUser(r).getId());
 		boardService.insertBoard(board); // 일을 시킴
 		return mv;
 	}
 	@RequestMapping(value = "/board/modify", method = RequestMethod.GET)
-	public ModelAndView boardModifyGet(ModelAndView mv, Integer num) { // 넘어오는 정보 없음 
+	public ModelAndView boardModifyGet(ModelAndView mv, Integer num, HttpServletRequest r) { // 넘어오는 정보 없음 
 		mv.setViewName("/board/modify");
 		BoardVo board = boardService.getBoard(num);
+		UserVo user = userService.getUser(r);
+		if(board == null || !user.getId().equals(board.getWriter()))
+			mv.setViewName("redirect:/board/list");
 		mv.addObject("board",board);
 		return mv;
 	}
 	@RequestMapping(value = "/board/modify", method = RequestMethod.POST)
-	public ModelAndView boardModifyGet(ModelAndView mv, BoardVo board) {
+	public ModelAndView boardModifyGet(ModelAndView mv, BoardVo board, HttpServletRequest r) {
 		mv.setViewName("redirect:/board/list");
+		board.setWriter(userService.getUser(r).getId());
 		boardService.updateBoard(board);
 		return mv;
 	}
 	@RequestMapping(value = "/board/delete", method = RequestMethod.GET)
-	public ModelAndView boardDeleteGet(ModelAndView mv, Integer num) { 
+	public ModelAndView boardDeleteGet(ModelAndView mv, Integer num, HttpServletRequest r) { 
 		mv.setViewName("redirect:/board/list");
-		boardService.deleteBoard(num);
+		boardService.deleteBoard(num, userService.getUser(r));
 		return mv;
 	}
 
