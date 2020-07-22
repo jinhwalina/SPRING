@@ -54,6 +54,10 @@ public class UserServiceImp implements UserService {
 		
 		return (UserVo)request.getSession().getAttribute("user");
 	}
+	@Override
+	public UserVo getUser(String id) {
+		return userDao.getUser(id);
+	}
 
 
 }
