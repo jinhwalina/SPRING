@@ -15,7 +15,7 @@
     <textarea class="form-control" rows="5" id="comment" name="content">${board.content}</textarea>
     <div class="form-group">
         <label>파일</label>
-        <input type="file" class="form-control" name="file"/>
+        <input type="file" class="form-control" name="file2"/>
     </div>
     <button>등록</button>
 </form>

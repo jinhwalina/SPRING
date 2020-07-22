@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class BoardVo {
 	
 	private int num;
@@ -15,8 +17,20 @@ public class BoardVo {
 	private int views;
 	private Date delDate;
 	private int like;
+	private String file;
 	
-	
+	@Override
+	public String toString() {
+		return "BoardVo [num=" + num + ", writer=" + writer + ", title=" + title + ", content=" + content
+				+ ", registerDate=" + registerDate + ", isDel=" + isDel + ", views=" + views + ", delDate=" + delDate
+				+ ", like=" + like + ", file=" + file + "]";
+	}
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
 	public int getLike() {
 		return like;
 	}
@@ -84,13 +98,15 @@ public class BoardVo {
 	public void setDelDate(Date delDate) {
 		this.delDate = delDate;
 	}
-	@Override
-	public String toString() {
-		return "BoardVo [num=" + num + ", writer=" + writer + ", title=" + title + ", content=" + content
-				+ ", registerDate=" + registerDate + ", isDel=" + isDel + ", views=" + views + ", delDate=" + delDate
-				+ ", like=" + like + "]";
-	}
 	
+	public void setFile(MultipartFile file) {
+		// TODO Auto-generated method stub
+		
+	}
+	public String getOriFile() {
+		int index = file.indexOf("_");
+		return file.substring(index+1);
+	}
 	
 	
 }

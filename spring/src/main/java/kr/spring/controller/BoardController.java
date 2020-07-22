@@ -1,6 +1,8 @@
 package kr.spring.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,9 +11,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,11 +87,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST) /* 메서드 이름에 따라 전송받을때 어디로 받을지 결정된다. */
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest request, MultipartFile file) throws IOException, Exception { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest request, MultipartFile file2) throws IOException, Exception { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
 		logger.info("URI:/board/register:POST");
 		mv.setViewName("redirect:/board/list"); 
+		String fileName = UploadFileUtils.uploadFile(uploadPath, file2.getOriginalFilename(),file2.getBytes());
+		board.setFile(fileName);
 		boardService.registerBoard(board, request);
-		UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
 		return mv;
 	}
 	
@@ -134,4 +142,27 @@ public class BoardController {
 	    }
 	    return map;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/board/download")
+	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
+	    InputStream in = null;
+	    ResponseEntity<byte[]> entity = null;
+	    try{
+	        HttpHeaders headers = new HttpHeaders();
+	        in = new FileInputStream(uploadPath+fileName);
+	        fileName = fileName.substring(fileName.indexOf("_")+1);
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        headers.add("Content-Disposition",  "attachment; filename=\"" 
+				+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in),headers,HttpStatus.CREATED);
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	        entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+	    }finally {
+	        in.close();
+	    }
+	    return entity;
+	}
+	
 }

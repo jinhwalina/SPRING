@@ -37,8 +37,8 @@
   </update>
   
   <insert id="registerBoard">
-  	insert into board(title,writer,content)
-  	values(#{board.title},#{board.writer},#{board.content})
+  	insert into board(title,writer,content,file)
+  	values(#{board.title},#{board.writer},#{board.content},#{board.file})
   </insert>
   <update id="updateBoard">
   	update board
@@ -48,7 +48,8 @@
   			isDel = #{board.isDel},
   			delDate = #{board.delDate},
   			board.like = 
-  				(select count(*) from spring.like where boNum = #{board.num})
+  				(select count(*) from spring.like where boNum = #{board.num}),
+  			file = #{board.file}
   		where
   			num = #{board.num}
   </update>
