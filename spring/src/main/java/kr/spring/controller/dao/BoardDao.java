@@ -23,4 +23,8 @@ public interface BoardDao {
 
 	int getTotalCount(@Param("cri")Criteria cri);
 
+	void insertLike(@Param("boNum")int boNum, @Param("id")String id);
+
+	int isLike(@Param("boNum")int boNum, @Param("id")String id);
+
 }

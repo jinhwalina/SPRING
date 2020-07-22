@@ -14,6 +14,15 @@ public class BoardVo {
 	private char isDel;
 	private int views;
 	private Date delDate;
+	private int like;
+	
+	
+	public int getLike() {
+		return like;
+	}
+	public void setLike(int like) {
+		this.like = like;
+	}
 	public int getNum() {
 		return num;
 	}
@@ -75,12 +84,13 @@ public class BoardVo {
 	public void setDelDate(Date delDate) {
 		this.delDate = delDate;
 	}
-	
 	@Override
 	public String toString() {
 		return "BoardVo [num=" + num + ", writer=" + writer + ", title=" + title + ", content=" + content
 				+ ", registerDate=" + registerDate + ", isDel=" + isDel + ", views=" + views + ", delDate=" + delDate
-				+ "]";
+				+ ", like=" + like + "]";
 	}
+	
+	
 	
 }

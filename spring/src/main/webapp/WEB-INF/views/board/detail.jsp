@@ -23,7 +23,12 @@
     </div>
     <div class="form-group">
       <label>조회수</label>
-      <input type="text" class="form-control"name="views" value="${board.views}" readonly> 
+      <input type="text" class="form-control"name="views" value="${board.views}" readonly>
+    </div>
+    <div class="form-group">
+      <label>추천수</label>
+      <input type="text" class="form-control"name="like" value="${board.like}" readonly>
+      <button type="button" class="btn btn-outline-success col-12" id="like">추천</button> 
     </div>
     <label>내용</label>
     <textarea class="form-control" rows="5" id="comment" name="content" readonly>${board.content}</textarea>
@@ -50,4 +55,34 @@
     	</div>
   	</form>
  -->
+ 
+ <script>
+	$(function(){
+		$('#like').click(function(){
+			var num = $('input[name=num]').val();
+		    $.ajax({ // 기본적인 형태의 정보를 보내는 방법 
+			    // 서버에 데이터를 전송하고, 서버에서는 받은 데이터를 처리하고 검색을 하거나 해서 다시 클라이언트에게 보냄
+		        async:true, // 동기 비동기 형식으로 어떻게 보낼지 
+		        type:'POST', // 데이터 접근 방법 
+		        data:num, // 내가 보낼 데이터 중괄호를 통해서 여러개를 보낼 수도 있음
+		        // 아이디 중복 체크는 동기 형식으로 처리
+		        // 댓글 등록은 비동기 형식 
+		        url:"<%=request.getContextPath()%>/board/like",
+		        dataType:"json",
+		        contentType:"application/json; charset=UTF-8",
+		        success : function(data){ // 성공하면 서버에서 보내준 값을 콘솔로그를 통해 찍어 보여달라.
+			        if(!data['isUser']){
+						alert("로그인한 회원만 추천할 수 있습니다.")
+				    }else{
+						if(data['like']<0){
+							alert('추천은 한 번만 가능합니다.')
+						}else{
+							$('input[name=like]').val(data['like'])
+						}
+					}
+		        }
+			})
+		})
+	})
+</script>
 	

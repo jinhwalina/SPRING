@@ -73,6 +73,21 @@ public class BoardSerivceImp implements BoardService {
 		pm.setCriteria(cri);
 		pm.setTotalCount(totalCount);
 		return pm;
+	}
+
+	@Override
+	public int updateLike(String num, String id) {
+		if(boardDao.isLike(Integer.parseInt(num),id) == 0) {
+			boardDao.insertLike(Integer.parseInt(num),id);
+		}else {
+			return -1;
+		}
+		
+		BoardVo board = boardDao.getBoard(Integer.parseInt(num));
+		// board.setLike(board.getLike()+1);
+		boardDao.updateBoard(board);
+		board = boardDao.getBoard(Integer.parseInt(num));
+		return board.getLike();
 	}	
 
 }
