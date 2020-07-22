@@ -1,5 +1,6 @@
 package kr.spring.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.spring.controller.pagination.Criteria;
 import kr.spring.controller.pagination.PageMaker;
 import kr.spring.controller.service.BoardService;
 import kr.spring.controller.service.UserService;
+import kr.spring.controller.utils.UploadFileUtils;
 import kr.spring.vo.BoardVo;
 import kr.spring.vo.UserVo;
+
+
 
 @Controller
 public class BoardController {
@@ -34,6 +39,7 @@ public class BoardController {
 	@Autowired
 	private UserService userService;
 	
+	private String uploadPath="D:\\이진화\\UploadFiles";
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
 	public ModelAndView boardListGet(ModelAndView mv, Criteria cri) {
@@ -74,10 +80,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST) /* 메서드 이름에 따라 전송받을때 어디로 받을지 결정된다. */
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest request) { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest request, MultipartFile file) throws IOException, Exception { /* name의 이름과 멤버변수가 일치하는게 있으면 자동으로 넘겨준다. */
 		logger.info("URI:/board/register:POST");
 		mv.setViewName("redirect:/board/list"); 
 		boardService.registerBoard(board, request);
+		UploadFileUtils.uploadFile(uploadPath, file.getOriginalFilename(),file.getBytes());
 		return mv;
 	}
 	
