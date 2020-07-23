@@ -69,4 +69,19 @@ public class BoardServiceImp implements BoardService {
 		pm.setTotalCount(boardDao.getTotalCountByBoard(cri));
 		return pm;
 	}
+
+	@Override
+	public int updateUp(int num, String id) {
+		//추천 테이블에서 게시글 번호와 아이디와 일치하는 값이 있는 검색해서
+		//이미 추천했다면 -1을 리턴
+		if(boardDao.selectUp(num, id) != 0)
+			return -1;
+		//추천 테이블에 추천을 등록
+		boardDao.insertUp(num, id);
+		//게시글의 추천수만 업데이트
+		boardDao.updateBoardByUp(num);
+		//게시글 정보를 가져옴
+		BoardVo board = boardDao.getBoard(num);
+		return board.getUp();
+	}
 }

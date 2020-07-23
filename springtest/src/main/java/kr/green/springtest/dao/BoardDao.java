@@ -19,5 +19,11 @@ public interface BoardDao {
 
 	int getTotalCountByBoard(@Param("cri")Criteria cri);
 
+	int selectUp(@Param("boNum")int num,  @Param("id")String id);
+
+	void insertUp(@Param("boNum")int num, @Param("id")String id);
+
+	void updateBoardByUp(@Param("num")int num);
+
 
 }

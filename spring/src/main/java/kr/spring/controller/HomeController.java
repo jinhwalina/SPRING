@@ -81,5 +81,36 @@ public class HomeController {
 	    map.put("check", check);
 	    return map;
 	}
+	
+	@RequestMapping(value ="/test2")
+	@ResponseBody
+	public Map<Object, Object> test2(@RequestBody TestVo test){
+	    Map<Object, Object> map = new HashMap<Object, Object>();
+	    System.out.println(test);
+	    map.put("res", "success!!");
+	    return map;
+	}
 
+	
+}
+class TestVo{ // 잠시 사용하기위해 이렇게 밑에 만들어도 된다.
+	private String id;
+	private int num;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	@Override
+	public String toString() {
+		return "TestVo [id=" + id + ", num=" + num + "]";
+	}
+	
 }

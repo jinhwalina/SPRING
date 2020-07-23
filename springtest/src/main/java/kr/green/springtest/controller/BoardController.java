@@ -1,13 +1,17 @@
 package kr.green.springtest.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.green.springtest.pagination.Criteria;
@@ -81,6 +85,23 @@ public class BoardController {
 		mv.setViewName("redirect:/board/list");
 		boardService.deleteBoard(num, userService.getUser(r));
 		return mv;
+	}
+	
+	@RequestMapping(value ="/board/up", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<Object, Object> boardUp(@RequestBody int num, HttpServletRequest r){
+	    Map<Object, Object> map = new HashMap<Object, Object>();
+	    // 현재 로그인 중인 유저 정보
+	    UserVo user = userService.getUser(r);
+	    if(user == null) {
+	    	map.put("isUser",false);
+	    }else {
+	    	map.put("isUser",true);
+	    	int up = boardService.updateUp(num, user.getId());
+	    	map.put("up",up);
+	    }
+
+	    return map;
 	}
 
 }

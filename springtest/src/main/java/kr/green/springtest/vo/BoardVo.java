@@ -13,12 +13,13 @@ public class BoardVo {
 	private Date delDate;
 	private char isDel;
 	private int views;
+	private int up;
 	
-	@Override 
-	public String toString() {
-		return "BoardVo [num=" + num + ", title=" + title + ", content=" + content + ", writer=" + writer
-				+ ", registerDate=" + registerDate + ", delDate=" + delDate + ", isDel=" + isDel + ", views=" + views
-				+ "]";
+	public int getUp() {
+		return up;
+	}
+	public void setUp(int up) {
+		this.up = up;
 	}
 	public int getNum() {
 		return num;
@@ -80,6 +81,12 @@ public class BoardVo {
 	}
 	public void setViews(int views) {
 		this.views = views;
+	}
+	@Override
+	public String toString() {
+		return "BoardVo [num=" + num + ", title=" + title + ", content=" + content + ", writer=" + writer
+				+ ", registerDate=" + registerDate + ", delDate=" + delDate + ", isDel=" + isDel + ", views=" + views
+				+ ", up=" + up + "]";
 	}
 	
 	
