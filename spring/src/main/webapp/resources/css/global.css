@@ -132,3 +132,8 @@ body{
 .display-none{
 	display: none;
 }
+label.error {
+	color: red;
+	font-size: 11px;
+	
+}
