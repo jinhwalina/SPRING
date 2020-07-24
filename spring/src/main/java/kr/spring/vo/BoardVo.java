@@ -99,10 +99,7 @@ public class BoardVo {
 		this.delDate = delDate;
 	}
 	
-	public void setFile(MultipartFile file) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	public String getOriFile() {
 		int index = file.indexOf("_");
 		return file.substring(index+1);

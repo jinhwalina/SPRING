@@ -100,23 +100,32 @@ public class BoardController {
 	public ModelAndView boardModifyGet(ModelAndView mv, Integer num, HttpServletRequest request) {
 		logger.info("URI:/board/modify:GET");
 		mv.setViewName("/board/modify");
-		System.out.println(num);
 		BoardVo board = null;
 		UserVo user = userService.getUser(request);
 		if(num != null) {
 			board = boardService.getBoard(num);
-			if(user == null || board.getWriter().equals(user.getId()))
+			if(user == null || !board.getWriter().equals(user.getId()))
 				mv.setViewName("redirect:/board/list");
 		}
 		mv.addObject("board",board);
 		return mv;
 	}
 	@RequestMapping(value = "/board/modify", method = RequestMethod.POST)
-	public ModelAndView boardModifyPost(ModelAndView mv, BoardVo board, HttpServletRequest request) {
+	public ModelAndView boardModifyPost(ModelAndView mv, BoardVo board, HttpServletRequest request, MultipartFile file2) throws IOException, Exception {
 		logger.info("URI:/board/modify:POST");
 		mv.setViewName("redirect:/board/list"); /* 수정이 끝나면 어디로 보낼지 정해주는 코드 이건 list로 보냄*/
 		UserVo user = userService.getUser(request);
+		
+		if(file2.getOriginalFilename().length() != 0) {
+			String fileName = UploadFileUtils.uploadFile(uploadPath, file2.getOriginalFilename(),file2.getBytes());
+			board.setFile(fileName);
+		// 이 작업은 왜할까 일반적으로 첨부파일에 아무것도 없으면 null값임. 아무것도 없어야하지만 빈문자열이 들어가있기 때문에 이걸 처리 해줘야한다.
+		}else if(board.getFile().length() == 0){ 
+			board.setFile(null);
+		}
 		boardService.updateBoard(board, user);
+		System.out.println(board);
+		System.out.println(file2.getOriginalFilename());
 		return mv;
 	}
 	
