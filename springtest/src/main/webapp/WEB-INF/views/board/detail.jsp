@@ -40,7 +40,11 @@
 	      		<label>Comment</label>
 	      		<textarea name="content" class="form-control" rows="5">${board.content}</textarea>
 	    	</div>
+	    	
 		 </form>
+		 <c:if test="${board.file != null }">
+		 	<a href="<%=request.getContextPath()%>/board/download?fileName=${board.file}">${board.oriFile }</a>
+		 </c:if>
 		<a href="<%=request.getContextPath()%>/board/list?page=${cri.page}&search=${cri.search}&type=${cri.type}"><button>목록</button></a>
 		<c:if test="${user != null }">
 			<a href="<%=request.getContextPath()%>/board/register"><button>등록</button></a>

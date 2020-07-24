@@ -1,19 +1,29 @@
 package kr.green.springtest.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.green.springtest.controller.utils.UploadFileUtils;
 import kr.green.springtest.pagination.Criteria;
 import kr.green.springtest.pagination.PageMaker;
 import kr.green.springtest.service.BoardService;
@@ -29,6 +39,8 @@ public class BoardController {
 	
 	@Autowired
 	UserService userService;
+	
+	private String uploadPath = "D:\\이진화\\UploadFiles";
 	
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
 	public ModelAndView boardListGet(ModelAndView mv, Criteria cri) {
@@ -57,9 +69,11 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST) 
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest r) {
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVo board, HttpServletRequest r, MultipartFile file2 ) throws IOException, Exception {// jsp의 name과 이름 같게 해주기 
 		mv.setViewName("redirect:/board/list"); // 등록을 하면 보내는곳 > list
 		board.setWriter(userService.getUser(r).getId());
+		String file = UploadFileUtils.uploadFile(uploadPath, file2.getOriginalFilename(),file2.getBytes());
+		board.setFile(file);
 		boardService.insertBoard(board); // 일을 시킴
 		return mv;
 	}
@@ -103,5 +117,33 @@ public class BoardController {
 
 	    return map;
 	}
+	@ResponseBody
+	@RequestMapping(value="board/download") // 다운로드는 복붙 후 경로 지정해주면 된다.
+	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
+	    InputStream in = null;
+	    ResponseEntity<byte[]> entity = null;
+	    try{
+	    	// HttpHeaders 객체 생성
+	        HttpHeaders headers = new HttpHeaders();
+	        // 다운로드 할 파일을 읽어옴
+	        in = new FileInputStream(uploadPath+fileName);
+	        // 다운로드시 저장 할 때 파일명 ! =을 통해서 덮어씀
+	        fileName = fileName.substring(fileName.indexOf("_")+1);
+	        // 헤더에 컨텐츠 타입을 설정
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        // 헤더 정보를 추가
+	        headers.add("Content-Disposition",  "attachment; filename=\"" 
+				+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        // ResponseEntity 객체 생성, 전송할 파일, 헤더정보, 헤더 상태
+	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in),headers,HttpStatus.CREATED);
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	        entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST); // 파일을 못읽어 왔을 때 
+	    }finally {
+	        in.close();
+	    }
+	    return entity;
+	}
+	
 
 }

@@ -35,8 +35,8 @@
   </select>
   <insert id="insertBoard">
   	insert into
-  		board(title, content, writer)
-		values(#{board.title},#{board.content},#{board.writer})
+  		board(title, content, writer,file)
+		values(#{board.title},#{board.content},#{board.writer},#{board.file})
   </insert>
   <update id="updateBoard">
   	update board
