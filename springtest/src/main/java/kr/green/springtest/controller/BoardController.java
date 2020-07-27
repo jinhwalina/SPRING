@@ -88,9 +88,16 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value = "/board/modify", method = RequestMethod.POST)
-	public ModelAndView boardModifyGet(ModelAndView mv, BoardVo board, HttpServletRequest r) {
+	public ModelAndView boardModifyGet(ModelAndView mv, BoardVo board, HttpServletRequest r, MultipartFile file2) throws IOException, Exception {
 		mv.setViewName("redirect:/board/list");
 		board.setWriter(userService.getUser(r).getId());
+		// 새로운 첨부파일이 추가가 되면
+		if(!file2.getOriginalFilename().contentEquals("")) {
+			String fileName = UploadFileUtils.uploadFile(uploadPath, file2.getOriginalFilename(), file2.getBytes());
+			board.setFile(fileName);
+		}else if(board.getFile() == null ||board.getFile().equals("")) {
+			board.setFile(null); 
+		}
 		boardService.updateBoard(board);
 		return mv;
 	}
