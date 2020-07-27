@@ -120,6 +120,9 @@ body{
     font-size: 24px;
     border: none;
 }
-
+label.error{
+	font-size: 11px;
+	color: red;
+}
 
         
