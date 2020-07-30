@@ -7,7 +7,7 @@
 	<h1>Hello :)</h1>
 	<h3>Login</h3>
 	<div class="container">
-		<form class="form-inline" >
+		<form class="form-inline" action="<%=request.getContextPath() %>/" method="post">
 			<label for="usr" class="mb-2 mr-sm-2">ID:</label>
 			<input type="text" class="form-control mb-2 mr-sm-2" id="usr" placeholder="아이디" name="id">
 			

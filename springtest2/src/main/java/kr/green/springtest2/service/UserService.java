@@ -9,4 +9,6 @@ public interface UserService {
 
 	public UserVo getUser(String id);
 
+	public UserVo isSignin(UserVo user);
+
 }

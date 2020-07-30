@@ -30,14 +30,27 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView home(ModelAndView mv) {
+		logger.info("URI:/");
+		mv.setViewName("/main/home"); 
+		return mv;
+	}
 	
-	@RequestMapping(value="/")
-    public ModelAndView main(ModelAndView mv) throws Exception{
-        mv.setViewName("/main/home");
-        mv.addObject("setHeader", "타일즈테스트");
-        System.out.println(userService.getPw("abc456"));
-        return mv;
-    }
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public ModelAndView homePost(ModelAndView mv, UserVo user) {
+		logger.info("URI:/");
+		System.out.println(user);
+		UserVo dbUser = userService.isSignin(user);
+		System.out.println(dbUser);
+		if(dbUser != null) {
+			mv.setViewName("/main/success"); // 로그인 성공 시 success 페이지 보여주게끔
+			mv.addObject("user",dbUser);
+		} else
+			mv.setViewName("redirect:/"); // 실패할 시 그냥 현재 페이지에 !
+		return mv;
+	}
+	
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
     public ModelAndView signupGet(ModelAndView mv){
         mv.setViewName("/user/signup");
