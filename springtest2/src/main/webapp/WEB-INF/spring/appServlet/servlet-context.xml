@@ -35,6 +35,33 @@
 	        </beans:list>
 	    </beans:property>
 	</beans:bean>
-
+	
+	<beans:bean id="authInterceptor" 
+	class="kr.green.springtest2.interceptor.AuthInterceptor"></beans:bean>
+	
+	<!-- 로그인 유지 관련 코드 하나만이 아니라 여러개 등록가능. 로그인 유지가 성공한걸 확인하기 위해서는 , 아무 화면에 
+	${user} 이렇게 입력해보면 된다. 만약 성공했을 시, 
+	UserVo [id=aaaa, pw=$2a$10$68kL3sdkER88QITbHtA3DOE13W99aILHgkjrEuOs3.zAuAROW6Ik6, email=slzp0119@naver.com, gender=female, auth=USER, isDel=N]
+	UserVo 있는 user 정보를 불러온다.
+	-->
+	<beans:bean id="loginInterceptor" 
+		class="kr.green.springtest2.interceptor.LoginInterceptor"></beans:bean>
+	<interceptors>
+		<interceptor> <!-- 인터셉터 안에 유지기능을 추가하기 위한 여러가지 맵핑이 가능하다. -->
+			<mapping path="/"/> <!-- 이 경로같은 경우 그냥 main으로 지정해준것. -->
+			<!-- <mapping path="/user/signin"/> 이런 식으로 여러가지 추가해줄수있는데, 이경우는 현재 user의 signin으로 경로를 지정해준것. -->
+			<beans:ref bean="loginInterceptor"/> 
+		</interceptor>
+		<interceptor>
+		<!-- 깃크라켄으로 볼때 로그인과 회원가입만 만들어진 상태라 board가 없기때문에 사실 이 코드는 현재로는 무의미하다. 하지만 그냥 미리 적어두는걸로!!!  -->
+        	<mapping path="/board/register"/>
+        	<mapping path="/board/modify"/>
+        	<mapping path="/board/delete"/>
+        	<beans:ref bean="authInterceptor"/>
+    	</interceptor>
+		<!-- 로그인 유지기능과 권한부여는 비슷한 역할을 하지만 권한부여는 로그인을 유지한 상태에서 주어지는것이기때문에 차이점이 있다.
+			로그인한 상태에서, 매핑된 지정 경로의 페이지만 접근이 가능하다고 생각하면 된다. 
+		 -->
+	</interceptors>
 	
 </beans:beans>

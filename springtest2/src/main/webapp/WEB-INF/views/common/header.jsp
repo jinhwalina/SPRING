@@ -1,5 +1,8 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
 	<div class="container">
 	  	<a class="navbar-brand" href="#">springtest</a>
@@ -14,9 +17,18 @@
 		      	<li class="nav-item">
 		        	<a class="nav-link" href="#">board</a>
 		      	</li>
-		      	<li class="nav-item">
-		        	<a class="nav-link" href="<%=request.getContextPath()%>/user/signup">sign up</a>
-		      	</li>    
+		      	
+		      	<c:if test="${user == null }">
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="<%=request.getContextPath()%>/user/signup">sign up</a>
+			      	</li>
+		      	</c:if>
+		      	
+		      	<c:if test ="${user != null}">
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="<%=request.getContextPath()%>/user/signout">sign out</a>
+			      	</li>
+		      	 </c:if>
 	    	</ul>
 		</div> 
 	</div> 

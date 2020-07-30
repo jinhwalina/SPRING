@@ -54,7 +54,7 @@
         	<mapping path="/board/modify"/>
         	<mapping path="/board/delete"/>
         	<beans:ref bean="authInterceptor"/>
-    </interceptor>
+    	</interceptor>
 	</interceptors>
 	
 	<!-- servlet-context.xml -->

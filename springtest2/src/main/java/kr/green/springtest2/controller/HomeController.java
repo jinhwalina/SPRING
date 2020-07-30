@@ -3,6 +3,8 @@ package kr.green.springtest2.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +32,15 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(ModelAndView mv) {
 		logger.info("URI:/");
 		mv.setViewName("/main/home"); 
 		return mv;
 	}
-	
+	// 로그인 POST
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ModelAndView homePost(ModelAndView mv, UserVo user) {
 		logger.info("URI:/");
@@ -51,6 +55,16 @@ public class HomeController {
 		return mv;
 	}
 	
+	// 로그아웃 기능
+	@RequestMapping(value = "/user/signout", method = RequestMethod.GET)
+	public ModelAndView signoutGet(ModelAndView mv, HttpServletRequest request) {
+		logger.info("URI:/signout:GET");
+		mv.setViewName("redirect:/");
+		request.getSession().removeAttribute("user");
+		return mv;
+	}
+	
+	// 회원가입 GET , POST
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
     public ModelAndView signupGet(ModelAndView mv){
         mv.setViewName("/user/signup");
@@ -68,6 +82,8 @@ public class HomeController {
 		}
 		return mv;
 	}
+	
+	// 아이디 중복체크 
 	@RequestMapping(value="/idCheck")
 	@ResponseBody
 	public Map<Object, Object> idcheck(@RequestBody String id){
@@ -77,4 +93,7 @@ public class HomeController {
 	    map.put("check", check);
 	    return map;
 	}
+	
+	
+	
 }
